@@ -4,21 +4,21 @@ var debug = ResourceLoader.load("res://Items/ItemClass/Item-TestItem.gd")
 var Item = ResourceLoader.load("res://Scripts/Inventory/Item.gd")
 
 var selectedItem = 0
-var itemslotPic = preload("res://Assets/Image/Inv-slot.png")
+var itemslotPic = preload("res://Assets/Image/item_slot.png")
 
-var scaleSpriteAmount = 2
+var scaleSpriteAmount = 1.5
 var camera
 var inventoryMidLocation = Vector2(OS.get_real_window_size().x/2, 0)
 
 # SlotPadding [Horizontal, Vertical]
-var slotPadding = [50, 5];
+var slotPadding = [25, 5];
 
 var amountOfSlots
 var slots = []
 var itemsHeld = []
 
 
-func _init(slotsCount=1, startingItems=[]):
+func _init(slotsCount=5, startingItems=[]):
 	amountOfSlots = slotsCount
 	itemsHeld = startingItems
 	inventoryMidLocation.y = inventoryMidLocation.y + itemslotPic.get_height()/2
@@ -33,6 +33,7 @@ func _ready():
 		slots[i].position = inventoryMidLocation + (Vector2((itemslotPic.get_width()*scaleSpriteAmount)+slotPadding[0], 0))*i
 		slots[i].texture = itemslotPic
 		self.add_child(slots[i])
+	addItem(ResourceLoader.load("res://Items/ItemClass/Item-RoboLol.gd"))
 	addItem(debug)
 		
 func _process(delta):
