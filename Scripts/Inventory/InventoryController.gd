@@ -3,6 +3,7 @@
 # supply the players node to playerNode
 # supply players camera or main camera to the camera var
 
+# Inventory Controller handles its own UI
 
 extends Node
 
@@ -65,12 +66,19 @@ func _process(delta):
 		 
 	for i in range(amountOfSlots):
 		slots[i].position = Vector2(offsetposition.x + (((itemslotPic.get_width()*scaleSpriteAmount)+slotPadding[0])*i), offsetposition.y + (itemslotPic.get_height()*scaleSpriteAmount)/2 + slotPadding[1])
+		slots[i].scale = Vector2(scaleSpriteAmount, scaleSpriteAmount)
 		if itemsHeld.size() > i:
 			if itemsHeld[i] != null:
 				if itemsHeld[i].get_parent() != self:
 					add_child(itemsHeld[i])
+			
 				itemsHeld[i].itemSprite.position = slots[i].position
-				itemsHeld[i].itemSprite.scale = Vector2(scaleSpriteAmount, scaleSpriteAmount)
+
+				if i != selectedItem:
+					itemsHeld[i].itemSprite.scale = Vector2(scaleSpriteAmount, scaleSpriteAmount)
+				else:
+					slots[i].scale = Vector2(scaleSpriteAmount*1.25, scaleSpriteAmount*1.25)
+					itemsHeld[i].itemSprite.scale = Vector2(scaleSpriteAmount*1.25, scaleSpriteAmount*1.25)
 
 func pickupItem():
 	if pickupArea.get_overlapping_areas() == null:
