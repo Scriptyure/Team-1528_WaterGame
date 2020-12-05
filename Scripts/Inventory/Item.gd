@@ -10,11 +10,17 @@ var itemType = null
 var itemName = null
 
 var itemSprite = null
-
+var itemArea = null
 var itemPic = null
 
 func _init():
 	itemSprite = Sprite.new()
+
+	itemArea = Area2D.new()
+	itemArea.add_child(CollisionShape2D.new())
+	itemArea.get_child(0).shape = RectangleShape2D.new()
+
+	self.add_child(itemArea)
 	self.add_child(itemSprite)
 	itemSprite.texture = itemPic
 	

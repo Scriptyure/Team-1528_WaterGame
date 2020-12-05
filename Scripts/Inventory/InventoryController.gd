@@ -1,14 +1,22 @@
+# --- SETUP ---
+# create an area 2d with a collision shape for player pickup range and supply it to pickupArea
+# supply the players node to playerNode
+# supply players camera or main camera to the camera var
+
+
 extends Node
 
-var debug = ResourceLoader.load("res://Items/ItemClass/Item-TestItem.gd")
+var TestItemClass = ResourceLoader.load("res://Items/ItemClass/Item-TestItem.gd")
 var Item = ResourceLoader.load("res://Scripts/Inventory/Item.gd")
+
+var pickupArea 
+var playerNode
 
 var selectedItem = 0
 var itemslotPic = preload("res://Assets/Image/item_slot.png")
 
 var scaleSpriteAmount = 1.5
 var camera
-var inventoryMidLocation = Vector2(OS.get_real_window_size().x/2, 0)
 
 # SlotPadding [Horizontal, Vertical]
 var slotPadding = [25, 5];
@@ -21,34 +29,40 @@ var itemsHeld = []
 func _init(slotsCount=5, startingItems=[]):
 	amountOfSlots = slotsCount
 	itemsHeld = startingItems
-	inventoryMidLocation.y = inventoryMidLocation.y + itemslotPic.get_height()/2
-	inventoryMidLocation.x -= slotsCount/2 * (itemslotPic.get_width()+slotPadding[0])
 	
 
 func _ready():
+	# --- Camera Stuff ---
 	camera = get_node("/root/World/PlayerCamera")
+	var viewSize = camera.get_viewport().size
+	
+	# --- Slot Init ---
 	for i in range(amountOfSlots):
 		slots.append(Sprite.new())
 		slots[i].scale = Vector2(scaleSpriteAmount,scaleSpriteAmount)
-		slots[i].position = inventoryMidLocation + (Vector2((itemslotPic.get_width()*scaleSpriteAmount)+slotPadding[0], 0))*i
+		slots[i].position = Vector2(camera.get_camera_screen_center().x - (amountOfSlots/2*((itemslotPic.get_width()*scaleSpriteAmount)+slotPadding[0])),(camera.get_camera_screen_center().y - viewSize.y/2))
 		slots[i].texture = itemslotPic
 		self.add_child(slots[i])
-	addItem(ResourceLoader.load("res://Items/ItemClass/Item-RoboLol.gd"))
-	addItem(debug)
+	
+	# --- Debug addItem's ---
+	#addItem(ResourceLoader.load("res://Items/ItemClass/Item-RoboLol.gd"))
+	addItem(TestItemClass)
 		
 func _process(delta):
 	# Calculate center of Inventory
 	var viewSize = camera.get_viewport().size
 	var offsetposition = Vector2(camera.get_camera_screen_center().x - (amountOfSlots/2*((itemslotPic.get_width()*scaleSpriteAmount)+slotPadding[0])),(camera.get_camera_screen_center().y - viewSize.y/2))
 	
-	# Debug for function testing
+	# --- Debug for function testing ---
 	# if Input.is_key_pressed(KEY_F):
 	# 	addItem(debug)
 	# if Input.is_key_pressed(KEY_G):
 	# 	removeItem("TestItem")
 	# if Input.is_key_pressed(KEY_H):
 	# 	removeItem(0)
-	
+	# if Input.is_key_pressed(KEY_L):
+	#	pickupItem()
+		 
 	for i in range(amountOfSlots):
 		slots[i].position = Vector2(offsetposition.x + (((itemslotPic.get_width()*scaleSpriteAmount)+slotPadding[0])*i), offsetposition.y + (itemslotPic.get_height()*scaleSpriteAmount)/2 + slotPadding[1])
 		if itemsHeld.size() > i:
@@ -58,7 +72,39 @@ func _process(delta):
 				itemsHeld[i].itemSprite.position = slots[i].position
 				itemsHeld[i].itemSprite.scale = Vector2(scaleSpriteAmount, scaleSpriteAmount)
 
+func pickupItem():
+	if pickupArea.get_overlapping_areas() == null:
+		return
+	if pickupArea.get_overlapping_areas().size() == 0:
+		return
+	
+	var _distances = []
+	var _Items = []
+	for _Item in pickupArea.get_overlapping_areas():
+		if _Item.get_parent().get_type() == "Item":
+			if _Item.get_parent().get_parent() != self:
+				_Items.append(_Item.get_parent())
+				_distances.append(abs(sqrt(pow((_Item.get_parent().position.x - playerNode.position.x), 2) + pow((_Item.get_parent().position.y - playerNode.position.y), 2))))
 
+	var _currentSmallest
+	var _smallestIndex
+	for i in range(_distances.size()):
+		if _currentSmallest == null:
+			_currentSmallest = _distances[i]
+		if _distances[i] < _currentSmallest:
+			_currentSmallest = _distances[i]
+			_smallestIndex = i;
+	
+	for _Item in range(_Items.size()):
+		if _distances[_Item] == _currentSmallest:
+			for _ItemHeld in itemsHeld:
+				if _ItemHeld.itemName == _Items[_Item].itemName:
+					print("Item already held in slot, can't pickup another")
+					return 
+			addItem(_Items[_Item].get_script())
+			_Items[_Item].free()
+
+	
 func addItem(item=null):
 	for i in range(itemsHeld.size()-1):
 		if itemsHeld[i] == null:
@@ -81,6 +127,18 @@ func addItem(item=null):
 		else:
 			item = item.new()
 			itemsHeld.append(item);
+
+func selectItem(item=null):
+	if item == null:
+		print("Item selection is empty!")
+		return
+	elif typeof(item) == TYPE_INT:
+		if item >= itemsHeld.size():
+			print("ERROR: Index selected is out of bounds (selectItem)")
+			return
+		selectedItem = item
+	
+	
 
 func removeItem(item=null):
 	if item == null:

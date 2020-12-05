@@ -8,7 +8,6 @@ extends "res://Scripts/Inventory/Item.gd"
 
 
 func _init():
-	._init()
 	itemPic = preload("res://Assets/Image/Item-RoboLol.png")
 	itemName = "Robot"
 	itemSprite.texture = itemPic
