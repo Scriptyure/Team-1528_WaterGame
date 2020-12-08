@@ -47,7 +47,7 @@ func _ready():
 	
 	# --- Debug addItem's ---
 	#addItem(ResourceLoader.load("res://Items/ItemClass/Item-RoboLol.gd"))
-	addItem(TestItemClass)
+	#addItem(TestItemClass)
 		
 func _process(delta):
 	# Calculate center of Inventory
