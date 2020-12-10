@@ -12,6 +12,10 @@ var itemName = null
 var itemSprite = null
 var itemArea = null
 var itemPic = null
+var itemRotationOffset = 0
+var itemRequiresFlipV = false;
+var itemDamage = null;
+var itemProjectile = null;
 
 func _init():
 	itemSprite = Sprite.new()
@@ -29,7 +33,7 @@ static func get_type():
 	return "Item"
 
 # useItem is meant to be overridden with the intended effect of an item
-func useItem():
+func useItem(parent):
 	print("WARNING: useItem must be overridden for this item to have use")
 
 # useItemSecondary is an items alternate action also overridden

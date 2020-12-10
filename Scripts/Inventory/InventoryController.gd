@@ -12,6 +12,7 @@ var Item = ResourceLoader.load("res://Scripts/Inventory/Item.gd")
 
 var pickupArea 
 var playerNode
+var playerHeld
 
 var selectedItem = 0
 var itemslotPic = preload("res://Assets/Image/item_slot.png")
@@ -26,6 +27,8 @@ var amountOfSlots
 var slots = []
 var itemsHeld = []
 
+var mousePos 
+var mouseAngle
 
 func _init(slotsCount=5, startingItems=[]):
 	amountOfSlots = slotsCount
@@ -33,6 +36,8 @@ func _init(slotsCount=5, startingItems=[]):
 	
 
 func _ready():
+	playerHeld = get_node("/root/World/HeldItem")
+
 	# --- Camera Stuff ---
 	camera = get_node("/root/World/PlayerCamera")
 	var viewSize = camera.get_viewport().size
@@ -46,23 +51,44 @@ func _ready():
 		self.add_child(slots[i])
 	
 	# --- Debug addItem's ---
-	#addItem(ResourceLoader.load("res://Items/ItemClass/Item-RoboLol.gd"))
-	#addItem(TestItemClass)
+	addItem(ResourceLoader.load("res://Items/ItemClass/Item-RoboLol.gd"))
+	addItem(TestItemClass)
+	addItem(ResourceLoader.load("res://Items/ItemClass/Item-ShotgunMain.gd"))
 		
 func _process(delta):
 	# Calculate center of Inventory
 	var viewSize = camera.get_viewport().size
 	var offsetposition = Vector2(camera.get_camera_screen_center().x - (amountOfSlots/2*((itemslotPic.get_width()*scaleSpriteAmount)+slotPadding[0])),(camera.get_camera_screen_center().y - viewSize.y/2))
+	# Calculate look Angle for items
+	mousePos = camera.get_viewport().get_mouse_position() - viewSize/2
+	var heldSprite = playerHeld.get_child(0)
+
+	if mousePos.x != 0:
+		mouseAngle = atan2(mousePos.y, mousePos.x) + PI/2
+		playerHeld.rotation = mouseAngle 
+	
+	if itemsHeld[selectedItem] != null:
+		if itemsHeld[selectedItem].itemRequiresFlipV:
+			if rad2deg(mouseAngle) > 180 || rad2deg(mouseAngle) < 0:
+				heldSprite.flip_v = true;
+			else:
+				heldSprite.flip_v = false;
+		if heldSprite.texture != itemsHeld[selectedItem].itemPic:
+			heldSprite.texture = itemsHeld[selectedItem].itemPic
+		heldSprite.rotation = itemsHeld[selectedItem].itemRotationOffset
 	
 	# --- Debug for function testing ---
-	# if Input.is_key_pressed(KEY_F):
-	# 	addItem(debug)
-	# if Input.is_key_pressed(KEY_G):
-	# 	removeItem("TestItem")
-	# if Input.is_key_pressed(KEY_H):
-	# 	removeItem(0)
-	# if Input.is_key_pressed(KEY_L):
-	#	pickupItem()
+	if(Input.is_mouse_button_pressed(BUTTON_LEFT)):
+		itemsHeld[selectedItem].useItem(self)
+
+	if Input.is_key_pressed(KEY_F):
+		selectItem(2)
+	if Input.is_key_pressed(KEY_G):
+		removeItem("TestItem")
+	if Input.is_key_pressed(KEY_H):
+		removeItem(0)
+	if Input.is_key_pressed(KEY_L):
+		pickupItem()
 		 
 	for i in range(amountOfSlots):
 		slots[i].position = Vector2(offsetposition.x + (((itemslotPic.get_width()*scaleSpriteAmount)+slotPadding[0])*i), offsetposition.y + (itemslotPic.get_height()*scaleSpriteAmount)/2 + slotPadding[1])
@@ -141,7 +167,7 @@ func selectItem(item=null):
 		print("Item selection is empty!")
 		return
 	elif typeof(item) == TYPE_INT:
-		if item >= itemsHeld.size():
+		if item >= itemsHeld.size() || item < 0:
 			print("ERROR: Index selected is out of bounds (selectItem)")
 			return
 		selectedItem = item
@@ -160,7 +186,8 @@ func removeItem(item=null):
 					for i in range(itemsHeld.size()-1):
 						if itemsHeld[i] == null:
 							itemsHeld.remove(i)
-	
+					selectItem(selectedItem-1)
+							
 	elif typeof(item) == TYPE_INT:
 		if item >= itemsHeld.size() || itemsHeld.size() == 0:
 			print("ERROR: That index doesn't exist")
@@ -169,6 +196,7 @@ func removeItem(item=null):
 		else:
 			itemsHeld[item].free()
 			itemsHeld.remove(item)
+			selectItem(selectedItem-1)
 	
 	elif item.get_type() == "Item":
 		print("ERROR: Can't remove an item type must be a name or index")

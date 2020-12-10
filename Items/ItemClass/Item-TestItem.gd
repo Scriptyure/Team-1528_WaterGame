@@ -11,6 +11,7 @@ func _init():
 	itemPic = preload("res://Assets/Image/Item-TestItem.png")
 	itemName = "TestItem"
 	itemSprite.texture = itemPic
+	
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

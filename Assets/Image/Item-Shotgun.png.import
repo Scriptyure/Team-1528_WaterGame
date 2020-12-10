@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/water_bullet.png-ea9b205b37ae1e9a4060c73a07a926a0.stex"
+path="res://.import/Item-Shotgun.png-2f17931646d6c08778a76c247cedf952.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Image/water_bullet.png"
-dest_files=[ "res://.import/water_bullet.png-ea9b205b37ae1e9a4060c73a07a926a0.stex" ]
+source_file="res://Assets/Image/Item-Shotgun.png"
+dest_files=[ "res://.import/Item-Shotgun.png-2f17931646d6c08778a76c247cedf952.stex" ]
 
 [params]
 
