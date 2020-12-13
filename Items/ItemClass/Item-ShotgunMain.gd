@@ -9,6 +9,8 @@ var clicked = false
 
 # Called when the node enters the scene tree for the first time.
 func _init():
+	itemCoolTime = 1.0
+	itemRotateOnCool = true
 	itemRequiresFlipV = true
 	itemRotationOffset = deg2rad(-90)
 	itemName = "ShotgunMain"
@@ -23,9 +25,9 @@ func _input(e):
 		pass
 	else:
 		clicked = false
-	
+
 func useItem(parent):
-	if !clicked:
+	if !clicked && !itemCooldown:
 		itemPos = parent.playerHeld.get_child(0).global_position
 		var mousePos = parent.mousePos
 		var mouseAngle = parent.mouseAngle
@@ -39,19 +41,12 @@ func useItem(parent):
 			bullet.global_position = itemPos + itemEnd*mousePos.normalized()
 			get_node("/root/World").add_child(bullet)
 		clicked = true
+		cooldown()
+
 	
 	
 
-func vec2deg(normalVectRad : Vector2):
-	var tanAns = atan2(normalVectRad.x, normalVectRad.y) + PI/2
-	print(tanAns)
-	return rad2deg(tanAns)
 
-func deg2vec(angleDeg : float):
-	var a = sin(deg2rad(angleDeg))
-	var b = cos(deg2rad(angleDeg))
-	var c = Vector2(a,b)
-	return c
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

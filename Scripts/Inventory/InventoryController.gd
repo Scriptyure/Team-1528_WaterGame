@@ -63,6 +63,7 @@ func _process(delta):
 	# Calculate center of Inventory
 	var viewSize = camera.get_viewport().size
 	var offsetposition = Vector2(camera.get_camera_screen_center().x - (amountOfSlots/2*((itemslotPic.get_width()*scaleSpriteAmount)+slotPadding[0])),(camera.get_camera_screen_center().y - viewSize.y/2))
+	
 	# Calculate look Angle for items
 	mousePos = camera.get_viewport().get_mouse_position() - viewSize/2
 	var heldSprite = playerHeld.get_child(0)
@@ -74,14 +75,24 @@ func _process(delta):
 	# --- HeldItem handling (flipping sprite, selecting sprite) ---
 	if itemsHeld.size() > 0:
 		if itemsHeld[selectedItem] != null:
+			# When cooling down rotate item in hand
+			if itemsHeld[selectedItem].itemCooldown && itemsHeld[selectedItem].itemRotateOnCool:
+				itemsHeld[selectedItem].itemTempRotation += deg2rad(360*2)*delta
+				heldSprite.rotation = itemsHeld[selectedItem].itemRotationOffset + itemsHeld[selectedItem].itemTempRotation
+			else:
+				itemsHeld[selectedItem].itemTempRotation = 0
+				heldSprite.rotation = itemsHeld[selectedItem].itemRotationOffset
+			
+			# Does item require a spriteflip?
 			if itemsHeld[selectedItem].itemRequiresFlipV:
 				if rad2deg(mouseAngle) > 180 || rad2deg(mouseAngle) < 0:
 					heldSprite.flip_v = true;
 				else:
 					heldSprite.flip_v = false;
+
+			# If the sprite doesn't match the selected item
 			if heldSprite.texture != itemsHeld[selectedItem].itemPic:
 				heldSprite.texture = itemsHeld[selectedItem].itemPic
-			heldSprite.rotation = itemsHeld[selectedItem].itemRotationOffset
 		else:
 			heldSprite.texture = null;
 	else:
