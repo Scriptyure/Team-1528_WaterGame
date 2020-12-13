@@ -8,7 +8,7 @@ var _image = preload("res://Assets/Image/WaterShot_bullet.png")
 
 # Called when the node enters the scene tree for the first time.
 func _init(_direction, rotation).(_direction, rotation):
-	bulletSpeed = 5;
+	bulletSpeed = 40;
 	bulletSprite.texture = _image
 	bulletColliderShape.radius = _image.get_width()/2
 

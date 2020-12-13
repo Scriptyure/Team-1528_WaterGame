@@ -14,6 +14,8 @@ var pickupArea
 var playerNode
 var playerHeld
 
+var currentEvent
+
 var selectedItem = 0
 var itemslotPic = preload("res://Assets/Image/item_slot.png")
 
@@ -33,7 +35,9 @@ var mouseAngle
 func _init(slotsCount=5, startingItems=[]):
 	amountOfSlots = slotsCount
 	itemsHeld = startingItems
-	
+
+func _input(event):
+	currentEvent = event
 
 func _ready():
 	playerHeld = get_node("/root/World/HeldItem")
@@ -51,9 +55,9 @@ func _ready():
 		self.add_child(slots[i])
 	
 	# --- Debug addItem's ---
-	addItem(ResourceLoader.load("res://Items/ItemClass/Item-RoboLol.gd"))
-	addItem(TestItemClass)
-	addItem(ResourceLoader.load("res://Items/ItemClass/Item-ShotgunMain.gd"))
+	#addItem(ResourceLoader.load("res://Items/ItemClass/Item-RoboLol.gd"))
+	#addItem(TestItemClass)
+	#addItem(ResourceLoader.load("res://Items/ItemClass/Item-ShotgunMain.gd"))
 		
 func _process(delta):
 	# Calculate center of Inventory
@@ -66,27 +70,34 @@ func _process(delta):
 	if mousePos.x != 0:
 		mouseAngle = atan2(mousePos.y, mousePos.x) + PI/2
 		playerHeld.rotation = mouseAngle 
-	
-	if itemsHeld[selectedItem] != null:
-		if itemsHeld[selectedItem].itemRequiresFlipV:
-			if rad2deg(mouseAngle) > 180 || rad2deg(mouseAngle) < 0:
-				heldSprite.flip_v = true;
-			else:
-				heldSprite.flip_v = false;
-		if heldSprite.texture != itemsHeld[selectedItem].itemPic:
-			heldSprite.texture = itemsHeld[selectedItem].itemPic
-		heldSprite.rotation = itemsHeld[selectedItem].itemRotationOffset
-	
+
+	# --- HeldItem handling (flipping sprite, selecting sprite) ---
+	if itemsHeld.size() > 0:
+		if itemsHeld[selectedItem] != null:
+			if itemsHeld[selectedItem].itemRequiresFlipV:
+				if rad2deg(mouseAngle) > 180 || rad2deg(mouseAngle) < 0:
+					heldSprite.flip_v = true;
+				else:
+					heldSprite.flip_v = false;
+			if heldSprite.texture != itemsHeld[selectedItem].itemPic:
+				heldSprite.texture = itemsHeld[selectedItem].itemPic
+			heldSprite.rotation = itemsHeld[selectedItem].itemRotationOffset
+		else:
+			heldSprite.texture = null;
+	else:
+		heldSprite.texture = null;
+
 	# --- Debug for function testing ---
-	if(Input.is_mouse_button_pressed(BUTTON_LEFT)):
-		itemsHeld[selectedItem].useItem(self)
+	if(Input.is_mouse_button_pressed(BUTTON_LEFT) && itemsHeld.size() > 0):
+		if(itemsHeld[selectedItem] != null):
+			itemsHeld[selectedItem].useItem(self)
 
 	if Input.is_key_pressed(KEY_F):
 		selectItem(2)
 	if Input.is_key_pressed(KEY_G):
 		removeItem("TestItem")
 	if Input.is_key_pressed(KEY_H):
-		removeItem(0)
+		addItem(ResourceLoader.load("res://Items/ItemClass/Item-ShotgunMain.gd"))
 	if Input.is_key_pressed(KEY_L):
 		pickupItem()
 		 
@@ -107,6 +118,9 @@ func _process(delta):
 					itemsHeld[i].itemSprite.scale = Vector2(scaleSpriteAmount*1.25, scaleSpriteAmount*1.25)
 
 func pickupItem():
+	if(pickupArea == null):
+		print("ERROR: no pickup area assigned!")
+		return
 	if pickupArea.get_overlapping_areas() == null:
 		return
 	if pickupArea.get_overlapping_areas().size() == 0:

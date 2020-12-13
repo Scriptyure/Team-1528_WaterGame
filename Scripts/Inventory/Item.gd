@@ -9,6 +9,7 @@ var itemType = null
 # Unique name for items
 var itemName = null
 
+var itemCooldown = 0;
 var itemSprite = null
 var itemArea = null
 var itemPic = null
@@ -16,6 +17,8 @@ var itemRotationOffset = 0
 var itemRequiresFlipV = false;
 var itemDamage = null;
 var itemProjectile = null;
+var itemEnd : Vector2 = Vector2(0,0);
+var itemPos = Vector2(0,0);
 
 func _init():
 	itemSprite = Sprite.new()

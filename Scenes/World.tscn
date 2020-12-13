@@ -19,9 +19,11 @@ current = true
 script = ExtResource( 2 )
 
 [node name="Item" type="Node2D" parent="."]
+visible = false
 script = ExtResource( 4 )
 
 [node name="Item2" type="Node2D" parent="."]
+visible = false
 script = ExtResource( 3 )
 
 [node name="HeldItem" type="Node2D" parent="."]
