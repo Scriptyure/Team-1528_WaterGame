@@ -1,15 +1,13 @@
 extends "res://Scripts/Inventory/Item.gd"
 
 
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-var _image = preload("res://Assets/Image/Item-Shotgun.png")
+var _image = preload("res://Assets/Image/Item-ShotgunWhite.png")
 var clicked = false
 
 # Called when the node enters the scene tree for the first time.
 func _init():
-	itemCoolTime = 1.0
+	itemCoolTime = 0.75
+	itemRotateOnCoolRate = 360*2.60
 	itemRotateOnCool = true
 	itemRequiresFlipV = true
 	itemRotationOffset = deg2rad(-90)
@@ -32,22 +30,15 @@ func useItem(parent):
 		var mousePos = parent.mousePos
 		var mouseAngle = parent.mouseAngle
 		var spread = 20;
-		var mousePosNorm = vec2deg(mousePos.normalized()) - spread*1.5 + rad2deg(itemRotationOffset)
+		var mousePosNorm = vec2deg(mousePos.normalized()) - spread*1.5 - rad2deg(itemRotationOffset)
+		var _itemEnd = itemEnd
+
 		print(mousePosNorm)
 		for i in range(4):
 			var _temp = mousePosNorm + spread*i
 			print(str(i) + ": " + str(_temp))
-			var bullet = ResourceLoader.load("res://Scripts/Bullets/Shotgun.gd").new(deg2vec(_temp), mouseAngle)
-			bullet.global_position = itemPos + itemEnd*mousePos.normalized()
+			var bullet = ResourceLoader.load("res://Scripts/Bullets/Shotgun.gd").new(deg2vec(_temp), mouseAngle, parent.scaleSpriteAmount)
+			bullet.global_position = itemPos + _itemEnd*mousePos.normalized()*parent.scaleSpriteAmount
 			get_node("/root/World").add_child(bullet)
 		clicked = true
 		cooldown()
-
-	
-	
-
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-#func _process(delta):
-#	pass

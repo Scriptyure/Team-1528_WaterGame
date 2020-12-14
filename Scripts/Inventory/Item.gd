@@ -3,24 +3,52 @@ extends Node2D
 # Item is an inherited template class with functionality that is given to all in game items
 class_name Item 
 
-# All items require a type [Weapon][Upgrade][Consumable] etc, replace with the desired type.
-var itemType = null
-
 # Unique name for items
 var itemName = null
+
+# Rotates the item when cooling down if set true
 var itemRotateOnCool = false
+
+# How fast the Item will rotate if itemRotateOnCool is true
+var itemRotateOnCoolRate = 0
+
+# A variable used by the Item to know whether it is on cooldown
 var itemCooldown : bool = false
+
+# Amount of cooldown time for the object before it is useful again
 var itemCoolTime : float
+
+# The Timer object for the Item
 var itemCoolTimer : Timer = Timer.new()
+
+# Items Sprite reference
 var itemSprite = null
+
+# Items area for pickup purposes
 var itemArea = null
+
+# The items texture for Sprite
 var itemPic = null
+
+# Rotational Offset for Item when visible
 var itemRotationOffset = 0
+
+# Does the Item require to be flipped when the mouse crosses the Y axis?
 var itemRequiresFlipV = false;
+
+# Damage value given to Bullet or other classes 
 var itemDamage = null;
+
+# What kind of projectile does the item use if any?
 var itemProjectile = null;
+
+# End which the items ability will "Shoot" out of 
 var itemEnd : Vector2 = Vector2(0,0);
+
+# The items position for local variable handling
 var itemPos = Vector2(0,0);
+
+# A temporary rotation handler
 var itemTempRotation = 0
 
 func _init():
@@ -58,14 +86,17 @@ func cooldown():
 	itemCooldown = true
 	itemCoolTimer.start(itemCoolTime)
 
+
+# --- Helper Functions ---
+
 static func vec2deg(normalVectRad : Vector2):
-	var tanAns = atan2(normalVectRad.x, normalVectRad.y) + PI/2
+	var tanAns = atan2(normalVectRad.y, normalVectRad.x) + PI/2
 	print(tanAns)
 	return rad2deg(tanAns)
 	
 static func deg2vec(angleDeg : float):
 	var a = sin(deg2rad(angleDeg))
 	var b = cos(deg2rad(angleDeg))
-	var c = Vector2(a,b)
-	return c
+	var c = Vector2(b,a)
+	return -c
 
