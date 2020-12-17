@@ -14,7 +14,6 @@ var pickupArea
 var playerNode
 var playerHeld
 
-var buttonBool = []
 var currentEvent
 
 var selectedItem = 0
@@ -35,21 +34,10 @@ var itemsHeld = []
 var mousePos 
 var mouseAngle
 
-enum Buttons{
-	MouseWheelDown = 0,
-	MouseWheelUp = 1,
-	Key1 = 2,
-	Key2 = 3,
-	Key3 = 4, 
-	Key4 = 5,
-	Key5 = 6
-}
-
 
 func _init(slotsCount=5, startingItems=[]):
 	amountOfSlots = slotsCount
 	itemsHeld = startingItems
-	buttonBool.resize(Buttons.size())
 
 # This will be handled by playerController script eventually, for testing purposes it exists here
 func _input(event):
@@ -96,9 +84,7 @@ func _ready():
 func _process(delta):
 	
 	var viewSize = camera.get_viewport().size
-
-	# Set scaling based on width of screen(viewport) with an initial of 480p resolution
-	scaleSpriteAmount = 1.4
+	scaleSpriteAmount = 2
 	
 	# Calculate center of Inventory
 	var offsetposition = Vector2(camera.get_camera_screen_center().x - (amountOfSlots/2*((itemslotPic.get_width()*scaleSpriteAmount)+(slotPadding[0]*scaleSpriteAmount))), (camera.get_camera_screen_center().y - viewSize.y/2)+(slotPadding[1]*scaleSpriteAmount))
@@ -117,10 +103,17 @@ func _process(delta):
 			# Setup the held Item based on the Item being held 
 			heldSprite.position = Vector2(0,-(itemsHeld[selectedItem].itemPic.get_width()/2*scaleSpriteAmount))
 			heldSprite.scale = Vector2(scaleSpriteAmount, scaleSpriteAmount)
+			
 			# When cooling down rotate item in hand
 			if itemsHeld[selectedItem].itemCooldown && itemsHeld[selectedItem].itemRotateOnCool:
 				itemsHeld[selectedItem].itemTempRotation += deg2rad(itemsHeld[selectedItem].itemRotateOnCoolRate)*delta
-				heldSprite.rotation = itemsHeld[selectedItem].itemRotationOffset + itemsHeld[selectedItem].itemTempRotation
+
+				# If the Item is flipped flip rotations
+				if heldSprite.flip_v:
+					heldSprite.rotation = itemsHeld[selectedItem].itemRotationOffset + itemsHeld[selectedItem].itemTempRotation
+				else:
+					heldSprite.rotation = itemsHeld[selectedItem].itemRotationOffset - itemsHeld[selectedItem].itemTempRotation
+
 			else:
 				itemsHeld[selectedItem].itemTempRotation = 0
 				heldSprite.rotation = itemsHeld[selectedItem].itemRotationOffset

@@ -15,8 +15,6 @@ func _init():
 	itemPic = _image
 	itemSprite.texture = itemPic
 	itemEnd = Vector2(16,16)
-	print(vec2deg(Vector2(0.707,0.707)))
-	print(deg2vec(vec2deg(Vector2(0.707,0.707))))
 
 func _input(e):
 	if (Input.is_mouse_button_pressed(BUTTON_LEFT) && clicked):
@@ -36,8 +34,7 @@ func useItem(parent):
 		print(mousePosNorm)
 		for i in range(4):
 			var _temp = mousePosNorm + spread*i
-			print(str(i) + ": " + str(_temp))
-			var bullet = ResourceLoader.load("res://Scripts/Bullets/Shotgun.gd").new(deg2vec(_temp), mouseAngle, parent.scaleSpriteAmount)
+			var bullet = ResourceLoader.load("res://Scripts/Bullets/Shotgun-Bullet.gd").new(deg2vec(_temp), mouseAngle, parent.scaleSpriteAmount)
 			bullet.global_position = itemPos + _itemEnd*mousePos.normalized()*parent.scaleSpriteAmount
 			get_node("/root/World").add_child(bullet)
 		clicked = true
