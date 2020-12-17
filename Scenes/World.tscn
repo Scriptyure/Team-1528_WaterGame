@@ -31,3 +31,5 @@ script = ExtResource( 3 )
 [node name="HeldItem" type="Sprite" parent="HeldItem"]
 position = Vector2( 0, -16 )
 texture = ExtResource( 5 )
+
+[node name="Player" type="KinematicBody2D" parent="."]
