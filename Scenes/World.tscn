@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scripts/Inventory/InventoryController.gd" type="Script" id=1]
 [ext_resource path="res://Scripts/UIManager.gd" type="Script" id=2]
 [ext_resource path="res://Items/ItemClass/Item-TestItem.gd" type="Script" id=3]
 [ext_resource path="res://Items/ItemClass/Item-RoboLol.gd" type="Script" id=4]
 [ext_resource path="res://icon.png" type="Texture" id=5]
+[ext_resource path="res://Assets/Image/[PH] PlayerModel.png" type="Texture" id=6]
 
 [node name="World" type="Node2D"]
 
@@ -29,7 +30,15 @@ script = ExtResource( 3 )
 [node name="HeldItem" type="Node2D" parent="."]
 
 [node name="HeldItem" type="Sprite" parent="HeldItem"]
+visible = false
 position = Vector2( 0, -16 )
 texture = ExtResource( 5 )
 
 [node name="Player" type="KinematicBody2D" parent="."]
+
+[node name="[PH] PlayerModel" type="Sprite" parent="Player"]
+position = Vector2( -0.872075, -20.8076 )
+scale = Vector2( 0.1287, 0.1287 )
+texture = ExtResource( 6 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
