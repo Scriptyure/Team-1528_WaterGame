@@ -64,7 +64,7 @@ func _input(event):
 		removeItem(selectedItem)
 
 func _ready():
-	playerHeld = get_node("/root/World/HeldItem")
+	playerHeld = get_node("/root/World/Player/HeldItem")
 
 	# --- Camera Stuff ---
 	camera = get_node("/root/World/PlayerCamera")

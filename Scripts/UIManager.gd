@@ -2,7 +2,7 @@ extends Node
 
 onready var camera : Camera2D = get_node("/root/World/PlayerCamera")
 var UIElements = []
-onready var spriteScale = get_node("/root/World/Inv").scaleSpriteAmount
+onready var spriteScale = get_node("/root/World/Player/Inv").scaleSpriteAmount
 var spriteScaleOffset = 1;
 
 # Horizontal, Vertical
