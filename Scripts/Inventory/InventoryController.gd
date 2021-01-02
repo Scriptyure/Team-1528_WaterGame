@@ -196,7 +196,6 @@ func pickupItem():
 			addItem(_Items[_Item].get_script())
 			_Items[_Item].free()
 
-	
 func addItem(item=null):
 	# Remove any NULL spaces in the inventory
 	for i in range(itemsHeld.size()-1):
@@ -239,8 +238,6 @@ func selectItem(item=null):
 			return
 		selectedItem = item
 	
-	
-
 func removeItem(item=null):
 	# Error Checking
 	if item == null:
@@ -279,7 +276,6 @@ func removeItem(item=null):
 	# This checks whether a Item class was given, for now at least there is no handling for this behavior
 	elif item.get_type() == "Item":
 		print("ERROR: Can't remove an item type must be a name or index")
-
 
 # Function that returns an array with initialized Items for use with inventory
 static func setStartingItems(startingItems):
