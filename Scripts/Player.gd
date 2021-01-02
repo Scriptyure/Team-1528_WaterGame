@@ -32,12 +32,12 @@ func getInput():
 	velocity = velocity.normalized() * speed
 
 # This calls the getInput function and provides the logic for the physics.
-func physicsProcess(_delta):
+#_delta is time between frames.
+func _physics_process(_delta):
 	getInput()
 	velocity = move_and_slide(velocity)
 
 func _ready():
-
 	# This gets the Sprite in World Scene for player's model. 
 	playerModel = get_node("/root/World/Player/[PH] PlayerModel")
 
