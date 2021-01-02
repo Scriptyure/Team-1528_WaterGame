@@ -64,6 +64,7 @@ func _input(event):
 		removeItem(selectedItem)
 
 func _ready():
+	playerNode = get_node("/root/World/Player")
 	playerHeld = get_node("/root/World/Player/HeldItem")
 
 	# --- Camera Stuff ---
@@ -77,20 +78,27 @@ func _ready():
 	for i in range(amountOfSlots):
 		slots.append(Sprite.new())
 		slots[i].scale = Vector2(scaleSpriteAmount,scaleSpriteAmount)
-		slots[i].position = Vector2(camera.get_camera_screen_center().x - (amountOfSlots/2*((itemslotPic.get_width()*scaleSpriteAmount)+(slotPadding[0]*scaleSpriteAmount))),(camera.get_camera_screen_center().y - viewSize.y/2)+(slotPadding[1]*scaleSpriteAmount))
+		var itemSlotWidth = (itemslotPic.get_width()*scaleSpriteAmount)
+		var itemSlotHeight = (camera.get_camera_screen_center().y - viewSize.y/2)+(slotPadding[1]*scaleSpriteAmount)
+
+		var paddingCalcWidth = amountOfSlots/2*(itemSlotWidth+(slotPadding[0]*scaleSpriteAmount))
+		slots[i].position = Vector2(camera.get_camera_screen_center().x - paddingCalcWidth,itemSlotHeight * camera.zoom.y)
 		slots[i].texture = itemslotPic
 		self.add_child(slots[i])
 		
 func _process(delta):
 	
 	var viewSize = camera.get_viewport().size
-	scaleSpriteAmount = 2
+	scaleSpriteAmount = 2 * ((camera.zoom.x+camera.zoom.y)/2)
 	
 	# Calculate center of Inventory
-	var offsetposition = Vector2(camera.get_camera_screen_center().x - (amountOfSlots/2*((itemslotPic.get_width()*scaleSpriteAmount)+(slotPadding[0]*scaleSpriteAmount))), (camera.get_camera_screen_center().y - viewSize.y/2)+(slotPadding[1]*scaleSpriteAmount))
+	var itemSlotHeight = (camera.get_camera_screen_center().y - viewSize.y/2)+(slotPadding[1]*scaleSpriteAmount)
+	var itemSlotWidth = (itemslotPic.get_width()*scaleSpriteAmount)*camera.zoom.x
+	var paddingCalcWidth = (amountOfSlots/2*(itemSlotWidth+(slotPadding[0]*scaleSpriteAmount)))*camera.zoom.x
+	var offsetposition = Vector2(camera.get_camera_screen_center().x - paddingCalcWidth, itemSlotHeight*camera.zoom.y)
 	
 	# Calculate look Angle for items
-	mousePos = camera.get_viewport().get_mouse_position() - viewSize/2
+	mousePos = (camera.get_viewport().get_mouse_position() - viewSize/2) - playerNode.position;
 	
 	if mousePos.x != 0:
 		mouseAngle = atan2(mousePos.y, mousePos.x) + PI/2
