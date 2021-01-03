@@ -8,8 +8,12 @@ var bulletSprite = null
 # Bullet scale, effects both Sprite and Collider
 var bulletSpriteScale
 
+var bulletEffect = preload("res://Scenes/BulletEffect.tscn")
+
 # The bullets speed in a direction
 var bulletSpeed = 0
+
+var bulletCollider : CollisionShape2D 
 
 # The bullets collider shape
 var bulletColliderShape = null
@@ -20,7 +24,7 @@ var bulletForwardRotationOffset = 0
 # Direction for the bullet to travel in Vector Angles
 var bulletDirection = 0
 
-# How long will the bullet exist without hitting something?
+# How long will the bullet exist without hitting something? (In Seconds)
 var bulletExistTime = 30.0
 
 # Bullet rotation grabbed from vector direction
@@ -33,6 +37,11 @@ func _init(_direction : Vector2 , _rotation, _scale):
 	bulletDirection = _direction
 	bulletColliderShape = CircleShape2D.new()
 	bulletColliderShape.radius = 1*_scale;
+	bulletCollider = CollisionShape2D.new()
+	bulletCollider.shape = bulletColliderShape
+	collision_layer = 0b10
+	collision_mask = 0b1
+	add_child(bulletCollider)
 	bulletRotation = vec2deg(_direction)
 	bulletSprite = Sprite.new()
 	bulletSprite.scale = Vector2(_scale, _scale)
@@ -46,7 +55,12 @@ func _ready():
 	timer.paused = false;
 
 func destroy():
+	var _instance = bulletEffect.instance()
+	_instance.position = position - (8*-bulletDirection)
+	_instance.rotation = bulletRotation;
+	get_node("/root/World").add_child(_instance);
 	self.queue_free()
+	
 
 
 
@@ -55,6 +69,11 @@ func _process(delta : float):
 	
 func _physics_process(delta):
 	move_and_slide(bulletDirection*bulletSpeed)
+	for i in get_slide_count():
+		var collision = get_slide_collision(i)
+		if collision != null:
+			destroy();
+	
 
 
 # --- Helper Functions ---

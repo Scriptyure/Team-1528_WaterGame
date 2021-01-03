@@ -53,7 +53,7 @@ func _ready():
 	UIElements[UIElementIndex.perks] = perks
 
 
-func _process(delta):
+func _process(_delta):
 	var viewSize = camera.get_viewport().size
 	
 	updateElementLocation(UIElementIndex.healthElement, Vector2(0,0), viewSize)
@@ -64,8 +64,8 @@ func _process(delta):
 	for element in range(UIElements.size()):
 		if UIElements[element]._spriteNode.get_parent() != self:
 			add_child(UIElements[element]._spriteNode)
-		UIElements[element]._spriteNode.scale = Vector2(spriteScale,spriteScale)
-		UIElements[element]._spriteNode.position = Vector2((camera.get_camera_screen_center().x-viewSize.x/2)+UIElements[element]._location.x,(camera.get_camera_screen_center().y - viewSize.y/2)+UIElements[element]._location.y)
+		UIElements[element]._spriteNode.scale = Vector2(spriteScale,spriteScale)*camera.zoom
+		UIElements[element]._spriteNode.position = (Vector2((camera.get_camera_screen_center().x-viewSize.x/2)+UIElements[element]._location.x,(camera.get_camera_screen_center().y - viewSize.y/2)+UIElements[element]._location.y))*camera.zoom
 
 
 func updateElementImage(element, image : Image):

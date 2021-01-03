@@ -93,8 +93,8 @@ func _process(delta):
 	
 	# Calculate center of Inventory
 	var itemSlotHeight = (camera.get_camera_screen_center().y - viewSize.y/2)+(slotPadding[1]*scaleSpriteAmount)
-	var itemSlotWidth = (itemslotPic.get_width()*scaleSpriteAmount)*camera.zoom.x
-	var paddingCalcWidth = (amountOfSlots/2*(itemSlotWidth+(slotPadding[0]*scaleSpriteAmount)))*camera.zoom.x
+	var itemSlotWidth = (itemslotPic.get_width()*scaleSpriteAmount)
+	var paddingCalcWidth = (amountOfSlots/2*(itemSlotWidth+(slotPadding[0]*scaleSpriteAmount*camera.zoom.x)))
 	var offsetposition = Vector2(camera.get_camera_screen_center().x - paddingCalcWidth, itemSlotHeight*camera.zoom.y)
 	
 	# Calculate look Angle for items
@@ -104,6 +104,11 @@ func _process(delta):
 		mouseAngle = atan2(mousePos.y, mousePos.x) + PI/2
 		playerHeld.rotation = mouseAngle 
 	
+	if rad2deg(mouseAngle) > 180 || rad2deg(mouseAngle) < 0:
+		playerNode.playerSpriteLeft = true;
+	else:
+		playerNode.playerSpriteLeft = false;
+		
 
 	# --- HeldItem handling (flipping sprite, selecting sprite) ---
 	if itemsHeld.size() > 0:
@@ -129,8 +134,10 @@ func _process(delta):
 			# Does item require a spriteflip?
 			if itemsHeld[selectedItem].itemRequiresFlipV:
 				if rad2deg(mouseAngle) > 180 || rad2deg(mouseAngle) < 0:
+					playerNode.playerSpriteLeft = true;
 					heldSprite.flip_v = true;
 				else:
+					playerNode.playerSpriteLeft = false;
 					heldSprite.flip_v = false;
 
 			# If the sprite doesn't match the selected item
