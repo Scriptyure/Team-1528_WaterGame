@@ -56,6 +56,7 @@ extents = Vector2( 11.6727, 30.9726 )
 [node name="PlayerCamera" type="Camera2D" parent="."]
 position = Vector2( 6.10352e-05, 0 )
 current = true
+zoom = Vector2( 0.75, 0.75 )
 
 [node name="Item" type="Node2D" parent="."]
 visible = false
@@ -82,7 +83,7 @@ script = ExtResource( 5 )
 
 [node name="PlayerSprite" type="AnimatedSprite" parent="Player"]
 frames = SubResource( 9 )
-frame = 5
+frame = 2
 speed_scale = 2.0
 playing = true
 

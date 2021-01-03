@@ -98,7 +98,7 @@ func _process(delta):
 	var offsetposition = Vector2(camera.get_camera_screen_center().x - paddingCalcWidth, itemSlotHeight*camera.zoom.y)
 	
 	# Calculate look Angle for items
-	mousePos = (camera.get_viewport().get_mouse_position() - viewSize/2) - playerNode.position;
+	mousePos = ((camera.get_viewport().get_mouse_position() - viewSize/2)+camera.position)*camera.zoom - playerNode.position;
 	
 	if mousePos.x != 0:
 		mouseAngle = atan2(mousePos.y, mousePos.x) + PI/2
