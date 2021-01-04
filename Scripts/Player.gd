@@ -13,14 +13,28 @@ onready var playerSprite : AnimatedSprite = get_node("/root/World/Player/PlayerS
 # This is the logic behind the controls of the for the player.
 func getInput():
 	velocity = Vector2()
+	var walking = false
+
 	if Input.is_action_pressed('PlayerRight'):
 		velocity.x += 1
+		walking = true;
 	if Input.is_action_pressed('PlayerLeft'):
 		velocity.x -= 1
+		walking = true;
 	if Input.is_action_pressed('PlayerDown'):
 		velocity.y += 1
+		walking = true;
 	if Input.is_action_pressed('PlayerUp'):
 		velocity.y -= 1
+		walking = true;
+		
+	if walking:
+		if playerSprite.animation != "Walk":
+			playerSprite.animation = "Walk"
+	else:
+		playerSprite.animation = "default"
+
+		
 	print(velocity);
 	velocity = velocity.normalized() * speed
 
