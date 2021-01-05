@@ -75,7 +75,9 @@ func _physics_process(delta):
 	for i in get_slide_count():
 		var collision = get_slide_collision(i)
 		if collision != null:
-			destroy();
+			print(collision.collider.name)
+			if collision.collider.name != "Player":
+				destroy();
 	
 
 
