@@ -28,6 +28,7 @@ _global_script_class_icons={
 
 config/name="WaterGame"
 run/main_scene="res://Scenes/World.tscn"
+boot_splash/bg_color=Color( 0, 0, 0, 1 )
 config/icon="res://icon.png"
 
 [display]

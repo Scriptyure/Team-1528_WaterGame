@@ -13,6 +13,9 @@ var bulletEffect = preload("res://Scenes/BulletEffect.tscn")
 # The bullets speed in a direction
 var bulletSpeed = 0
 
+# The bullets damage to player or enemy
+
+
 var bulletCollider : CollisionShape2D 
 
 # The bullets collider shape

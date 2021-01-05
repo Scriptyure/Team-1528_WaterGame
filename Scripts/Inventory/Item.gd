@@ -48,12 +48,19 @@ var itemEnd : Vector2 = Vector2(0,0);
 # The items position for local variable handling
 var itemPos = Vector2(0,0);
 
+# Item sound
+var itemUseSound
+
+# Items sound controller
+var AudioController : AudioStreamPlayer2D
+
 # A temporary rotation handler
 var itemTempRotation = 0
 
 func _init():
 	itemSprite = Sprite.new()
-
+	AudioController = AudioStreamPlayer2D.new()
+	add_child(AudioController)
 	add_child(itemCoolTimer)
 
 	itemArea = Area2D.new()

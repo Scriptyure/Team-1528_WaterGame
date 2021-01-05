@@ -17,7 +17,7 @@ func _physics_process(delta):
 	else:
 		enemyMove = Vector2.ZERO
 		
-	enemyMove = move_and_collide(enemyMove)
+	enemyMove = move_and_slide(enemyMove)
 	
 func _on_Area2D_body_entered(_body):
 	if _body == get_parent().get_node("Player"):

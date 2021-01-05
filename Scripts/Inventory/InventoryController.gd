@@ -10,6 +10,7 @@ extends Node
 var TestItemClass = ResourceLoader.load("res://Items/ItemClass/Item-TestItem.gd")
 var Item = ResourceLoader.load("res://Scripts/Inventory/Item.gd")
 
+var UI_ZINDEX = 500;
 var pickupArea 
 var playerNode
 var playerHeld
@@ -115,7 +116,7 @@ func _process(delta):
 		if itemsHeld[selectedItem] != null:
 			# Setup the held Item based on the Item being held 
 			heldSprite.position = Vector2(0,-(itemsHeld[selectedItem].itemPic.get_width()/2*scaleSpriteAmount))
-			heldSprite.scale = Vector2(scaleSpriteAmount, scaleSpriteAmount)
+			#heldSprite.scale = Vector2(scaleSpriteAmount, scaleSpriteAmount)
 			
 			# When cooling down rotate item in hand
 			if itemsHeld[selectedItem].itemCooldown && itemsHeld[selectedItem].itemRotateOnCool:
@@ -156,6 +157,7 @@ func _process(delta):
 		# Scaling is handled based on screen size and the independent scaling
 		slots[i].scale = Vector2(scaleSpriteAmount, scaleSpriteAmount)
 		
+		slots[i].z_index = UI_ZINDEX
 		# Guarantee that all Items are parented to the inventory
 		if itemsHeld.size() > i:
 			if itemsHeld[i] != null:
@@ -165,6 +167,8 @@ func _process(delta):
 				# Place items in their respective slots
 				itemsHeld[i].itemSprite.position = slots[i].position
 				
+				itemsHeld[i].itemSprite.z_index = UI_ZINDEX
+
 				# If the slot isn't selected Keep the scaling normal, if it is selected make it show
 				if i != selectedItem:
 					itemsHeld[i].itemSprite.scale = Vector2(scaleSpriteAmount, scaleSpriteAmount)

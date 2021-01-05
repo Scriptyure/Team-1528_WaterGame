@@ -6,6 +6,9 @@ var clicked = false
 
 # Called when the node enters the scene tree for the first time.
 func _init():
+	itemUseSound = load("res://SoundEffects/shotgun.wav")
+	AudioController.stream = itemUseSound
+	AudioController.volume_db = -10;
 	itemCoolTime = 0.75
 	itemRotateOnCoolRate = 360*2.60
 	itemRotateOnCool = true
@@ -23,7 +26,9 @@ func _input(e):
 		clicked = false
 
 func useItem(parent):
+	
 	if !clicked && !itemCooldown:
+		AudioController.play()
 		itemPos = parent.playerHeld.get_child(0).global_position
 		var mousePos = parent.mousePos
 		var mouseAngle = parent.mouseAngle

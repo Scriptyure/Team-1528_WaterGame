@@ -35,7 +35,7 @@ func getInput():
 		playerSprite.animation = "default"
 
 		
-	print(velocity);
+	# print(velocity);
 	velocity = velocity.normalized() * speed
 
 # This calls the getInput function and provides the logic for the physics.
@@ -50,6 +50,16 @@ func _process(_delta):
 func _ready():
 	pass
 
+# Player visual effects
+func effects():
+
+	# --- DASH/DODGE ---
+	# this is a maybe
+	
+	# --- WALK ---
+	# tiny cloud effect
+
+	pass
 
 
 

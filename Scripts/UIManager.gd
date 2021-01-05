@@ -1,5 +1,6 @@
 extends Node
 
+var UI_ZINDEX = 500
 onready var camera : Camera2D = get_node("/root/World/PlayerCamera")
 var UIElements = []
 onready var spriteScale = get_node("/root/World/Player/Inv").scaleSpriteAmount
@@ -64,6 +65,7 @@ func _process(_delta):
 	for element in range(UIElements.size()):
 		if UIElements[element]._spriteNode.get_parent() != self:
 			add_child(UIElements[element]._spriteNode)
+		UIElements[element]._spriteNode.z_index = UI_ZINDEX
 		UIElements[element]._spriteNode.scale = Vector2(spriteScale,spriteScale)*camera.zoom
 		UIElements[element]._spriteNode.position = (Vector2((camera.get_camera_screen_center().x-viewSize.x/2)+UIElements[element]._location.x,(camera.get_camera_screen_center().y - viewSize.y/2)+UIElements[element]._location.y))*camera.zoom
 
