@@ -6,6 +6,9 @@ class_name Item
 # Unique name for items
 var itemName = null
 
+#scale the item and its end will be set with
+var itemScale = 1
+
 # Rotates the item when cooling down if set true
 var itemRotateOnCool = false
 

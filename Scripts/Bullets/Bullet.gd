@@ -8,7 +8,7 @@ var bulletSprite = null
 # Bullet scale, effects both Sprite and Collider
 var bulletSpriteScale
 
-var bulletEffect = preload("res://Scenes/BulletEffect.tscn")
+var bulletEffect = preload("res://Scenes/Effects/BulletEffect.tscn")
 
 # The bullets speed in a direction
 var bulletSpeed = 0

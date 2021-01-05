@@ -115,8 +115,8 @@ func _process(delta):
 	if itemsHeld.size() > 0:
 		if itemsHeld[selectedItem] != null:
 			# Setup the held Item based on the Item being held 
-			heldSprite.position = Vector2(0,-(itemsHeld[selectedItem].itemPic.get_width()/2*scaleSpriteAmount))
-			#heldSprite.scale = Vector2(scaleSpriteAmount, scaleSpriteAmount)
+			heldSprite.position = Vector2(0,-(itemsHeld[selectedItem].itemPic.get_width()/2*itemsHeld[selectedItem].itemScale.x))
+			heldSprite.scale = Vector2(itemsHeld[selectedItem].itemScale.x, itemsHeld[selectedItem].itemScale.y)
 			
 			# When cooling down rotate item in hand
 			if itemsHeld[selectedItem].itemCooldown && itemsHeld[selectedItem].itemRotateOnCool:

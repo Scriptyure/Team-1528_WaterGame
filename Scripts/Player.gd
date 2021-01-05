@@ -6,7 +6,12 @@ var velocity = Vector2()
 
 var playerSpriteLeft : bool = false
 
+var EffectsClass = preload("res://Scripts/Effects/Effects.gd")
+var Effects = EffectsClass.new(self)
+
 var player
+
+var playerHealth = 10;
 
 onready var playerSprite : AnimatedSprite = get_node("/root/World/Player/PlayerSprite")
 
@@ -29,6 +34,7 @@ func getInput():
 		walking = true;
 		
 	if walking:
+		Effects.WalkEffect(Vector2(position.x, position.y+32))
 		if playerSprite.animation != "Walk":
 			playerSprite.animation = "Walk"
 	else:
@@ -48,18 +54,16 @@ func _process(_delta):
 	playerSprite.flip_h = playerSpriteLeft;
 
 func _ready():
+	add_child(Effects)
 	pass
 
 # Player visual effects
-func effects():
 
-	# --- DASH/DODGE ---
-	# this is a maybe
-	
-	# --- WALK ---
-	# tiny cloud effect
 
+# Function for handling health damage
+func DamageHealth(amount):
 	pass
+
 
 
 

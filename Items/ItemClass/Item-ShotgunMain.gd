@@ -4,8 +4,10 @@ extends "res://Scripts/Inventory/Item.gd"
 var _image = preload("res://Assets/Image/Item-ShotgunWhite.png")
 var clicked = false
 
+
 # Called when the node enters the scene tree for the first time.
 func _init():
+	itemScale = Vector2(1.5,1.5);
 	itemUseSound = load("res://SoundEffects/shotgun.wav")
 	AudioController.stream = itemUseSound
 	AudioController.volume_db = -10;
@@ -40,7 +42,7 @@ func useItem(parent):
 		for i in range(4):
 			var _temp = mousePosNorm + spread*i
 			var bullet = ResourceLoader.load("res://Scripts/Bullets/Shotgun-Bullet.gd").new(deg2vec(_temp), mouseAngle, parent.scaleSpriteAmount)
-			bullet.global_position = itemPos + _itemEnd*mousePos.normalized()*parent.scaleSpriteAmount
+			bullet.global_position = itemPos + _itemEnd*mousePos.normalized()*itemScale
 			get_node("/root/World").add_child(bullet)
 		clicked = true
 		cooldown()

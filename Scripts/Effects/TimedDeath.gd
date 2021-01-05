@@ -8,7 +8,7 @@ export (float) var timeToDeath;
 var timer = Timer.new();
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	get_parent().add_child(timer)
+	add_child(timer)
 	timer.connect("timeout", self, "Death")
 	timer.start(timeToDeath)
 	

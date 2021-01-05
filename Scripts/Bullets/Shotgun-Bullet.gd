@@ -1,4 +1,4 @@
-extends "res://Scripts/Bullet.gd"
+extends "res://Scripts/Bullets/Bullet.gd"
 
 
 # Declare member variables here. Examples:
