@@ -22,7 +22,7 @@ func _physics_process(delta):
 		var playerDistance = player.position - position
 		
 		if pow(playerDistance.x, 2) + pow(playerDistance.y, 2) < pow(MAX_DISTANCE, 2):
-			enemyMove = 0
+			enemyMove = Vector2.ZERO
 	
 	enemyMove = move_and_slide(enemyMove)
 	

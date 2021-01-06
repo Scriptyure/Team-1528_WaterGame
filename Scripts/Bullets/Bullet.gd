@@ -1,4 +1,4 @@
-extends KinematicBody2D
+extends Area2D
 
 class_name Bullet
 
@@ -14,8 +14,6 @@ var bulletEffect = preload("res://Scenes/Effects/BulletEffect.tscn")
 var bulletSpeed = 0
 
 # The bullets damage to player or enemy
-
-
 var bulletCollider : CollisionShape2D 
 
 # The bullets collider shape
@@ -25,7 +23,7 @@ var bulletColliderShape = null
 var bulletForwardRotationOffset = 0
 
 # Direction for the bullet to travel in Vector Angles
-var bulletDirection = 0
+var bulletDirection : Vector2 = Vector2.ZERO
 
 # How long will the bullet exist without hitting something? (In Seconds)
 var bulletExistTime = 30.0
@@ -71,12 +69,13 @@ func _process(delta : float):
 	bulletSprite.global_rotation = (bulletRotation) + deg2rad(bulletForwardRotationOffset)
 	
 func _physics_process(delta):
-	move_and_slide(bulletDirection*bulletSpeed)
-	for i in get_slide_count():
-		var collision = get_slide_collision(i)
+	position += bulletDirection * bulletSpeed * delta
+	var _collisions = get_overlapping_bodies()
+	for i in _collisions:
+		var collision = i
 		if collision != null:
-			print(collision.collider.name)
-			if collision.collider.name != "Player":
+			print(collision.name)
+			if collision.name != "Player":
 				destroy();
 	
 
