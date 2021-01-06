@@ -9,6 +9,7 @@ var FadeTimer : Timer = Timer.new()
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	add_child(FadeTimer)
+	scale = Vector2(1+rand_range(0,0.5),1+rand_range(0,0.5))
 	FadeTimer.connect("timeout", self, "fade5")
 	FadeTimer.start(0.05)
 

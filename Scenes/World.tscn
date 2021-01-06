@@ -207,7 +207,6 @@ speed = 200
 
 [node name="PlayerSprite" type="AnimatedSprite" parent="Player"]
 frames = SubResource( 14 )
-frame = 1
 speed_scale = 2.0
 playing = true
 
