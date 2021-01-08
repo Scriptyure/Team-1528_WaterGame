@@ -24,10 +24,8 @@ func HealEffect():
 	pass
 
 func WalkEffect(FeetLocation):
-	print(effectTimers[0].time_left)
 	if (effectTimers[0].time_left <= 0):
 		var temp = walkEffectScene.instance()
-		print("passedTimer")
 		temp.position = FeetLocation
 		get_node("/root/World").add_child(temp)
 		effectTimers[0].start(0.5)

@@ -57,7 +57,7 @@ func _ready():
 func _process(_delta):
 	var viewSize = camera.get_viewport().size
 	
-	updateElementLocation(UIElementIndex.healthElement, Vector2(0,0), viewSize)
+	updateElementLocation(UIElementIndex.healthElement, Vector2(50,15), viewSize)
 	updateElementLocation(UIElementIndex.coinElement, Vector2(0,0), viewSize)
 	updateElementLocation(UIElementIndex.ammoCounter, Vector2(0,0), viewSize)
 	updateElementLocation(UIElementIndex.perks, Vector2(0,0), viewSize)

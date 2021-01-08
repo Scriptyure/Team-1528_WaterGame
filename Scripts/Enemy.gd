@@ -8,13 +8,19 @@ var enemyMove = Vector2.ZERO
 var enemy
 var player = null
 
-const MAX_DISTANCE = 60
+var enemyEffects = (load("res://Scripts/Effects/Effects.gd")).new(self)
+
+const MAX_DISTANCE = 90
+
+func _ready():
+	add_child(enemyEffects)
 
 func _physics_process(delta):
 	enemyMove = Vector2.ZERO
 	
 	if player != null:
 		enemyMove = get_global_position().direction_to(player.get_global_position()) * speed
+		
 	else:
 		enemyMove = Vector2.ZERO
 	
@@ -24,6 +30,10 @@ func _physics_process(delta):
 		if pow(playerDistance.x, 2) + pow(playerDistance.y, 2) < pow(MAX_DISTANCE, 2):
 			enemyMove = Vector2.ZERO
 	
+	# Enemy Walk Effect
+	if(enemyMove != Vector2.ZERO):
+		enemyEffects.WalkEffect(Vector2(position.x, position.y+32));
+
 	enemyMove = move_and_slide(enemyMove)
 	
 func _on_Area2D_body_entered(_body):
